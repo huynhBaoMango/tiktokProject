@@ -13,6 +13,11 @@ public class GameManager : MonoBehaviour
 
     public Image imgTeam1, imgTeam2;
     public List<Sprite> sprites;
+
+
+    public Sprite winSp, loseSp;
+
+    public GameObject EndGameUI;
     
     void Start()
     {
