@@ -17,7 +17,6 @@ namespace TikTokLiveUnity.Example
         [SerializeField]
         [Tooltip("Duration for objects to exist")]
         private float timeToLive = 3f;
-
         // private GameObject rowPrefab;
 
         [SerializeField]
@@ -37,7 +36,7 @@ namespace TikTokLiveUnity.Example
 
         public List<GameObject> coinsPrefab = new List<GameObject>();
         public Transform spawns;
-
+        public GameManager gameManager;
         public Transform coinParent;
 
 
@@ -78,7 +77,10 @@ namespace TikTokLiveUnity.Example
 
         private void StreakFinished(TikTokGift gift, long finalAmount)
         {
-            StartCoroutine(DoTheGiftCheck(gift, finalAmount));
+            if (gameManager.isPlaying)
+            {
+                StartCoroutine(DoTheGiftCheck(gift, finalAmount));
+            }
         }
 
         IEnumerator DoTheGiftCheck(TikTokGift gift, long finalAmount)
@@ -102,7 +104,11 @@ namespace TikTokLiveUnity.Example
         /// </summary>
         private void OnComment(TikTokLiveClient sender, Chat comment)
         {
-            
+            string text = comment.Message;
+            if(text == "!rung")
+            {
+                gameManager.Shake();
+            }
         }
         /// <summary>
         /// Requests Image from TikTokLive-Manager
@@ -161,12 +167,11 @@ namespace TikTokLiveUnity.Example
 
         void SpawnNormalCoinVoid()
         {
-            StartCoroutine(SpawnNormalCoin());
+            if(gameManager.isPlaying) StartCoroutine(SpawnNormalCoin());
         }
 
         IEnumerator SpawnNormalCoin()
         {
-            int order = Random.Range(0,3);
             GameObject newCoin = Instantiate(coinsPrefab[0], spawns.position, Quaternion.Euler(90, 0, 0), coinParent);
             yield return new WaitForSeconds(1f);
         }

@@ -5,6 +5,7 @@ public class moving : MonoBehaviour
     public float moveSpeed = 10f; // Tốc độ di chuyển
     public float moveDistanceForward = 137f; // Khoảng cách di chuyển về phía trước
     public float moveDistanceBackward = 165.2f; // Khoảng cách di chuyển về phía sau
+    public GameManager manager;
     private Rigidbody rb;
 
     private Vector3 targetPosition;
@@ -33,17 +34,20 @@ public class moving : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Tính toán khoảng cách di chuyển mỗi frame
-        float step = moveSpeed * Time.deltaTime;
-
-        // Di chuyển đối tượng đến mục tiêu một cách mượt mà
-        rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, step));
-
-        // Kiểm tra nếu đối tượng đã đạt đến mục tiêu
-        if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
+        if(manager.isPlaying)
         {
-            // Đổi hướng di chuyển sau 1.5 giây
-            Invoke(isMovingForward ? "MoveBack" : "MoveForward", 1.5f);
+            // Tính toán khoảng cách di chuyển mỗi frame
+            float step = moveSpeed * Time.deltaTime;
+
+            // Di chuyển đối tượng đến mục tiêu một cách mượt mà
+            rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, step));
+
+            // Kiểm tra nếu đối tượng đã đạt đến mục tiêu
+            if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
+            {
+                // Đổi hướng di chuyển sau 1.5 giây
+                Invoke(isMovingForward ? "MoveBack" : "MoveForward", 1.5f);
+            }
         }
     }
 }
