@@ -1,3 +1,4 @@
+using DG.Tweening;
 using NaughtyAttributes;
 using NUnit.Framework;
 using System.Collections;
@@ -13,13 +14,23 @@ public class CoinSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        MoveLeft();
     }
 
-    // Update is called once per frame
-    void Update()
+    void MoveLeft()
     {
-        
+        gameObject.transform.DOMoveX(-23.6f, 10f).OnComplete(() =>
+        {
+            MoveRight();
+        });
+    }
+
+    void MoveRight()
+    {
+        gameObject.transform.DOMoveX(23.6f, 10f).OnComplete(() =>
+        {
+            MoveLeft();
+        });
     }
 
     [Button]

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5298877483310478156}
   - component: {fileID: 1760527200010444716}
   - component: {fileID: 390784108148890969}
+  - component: {fileID: -5550388604494868893}
   m_Layer: 0
   m_Name: normalCoin
   m_TagString: Untagged
@@ -66,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7d80ededa9935ec4497f4bebb7a1ac31, type: 2}
+  - {fileID: 2100000, guid: 3b5cc91c3bf8cf74391252247f52fb59, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -137,3 +138,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-5550388604494868893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5542833765386940522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea527ef36013de468fe144e434c45c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imgs: []
+  score: 1
+  user: 

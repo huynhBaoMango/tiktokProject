@@ -36,7 +36,7 @@ namespace TikTokLiveUnity.Example
         };
 
         public List<GameObject> coinsPrefab = new List<GameObject>();
-        public List<Transform> spawns = new List<Transform>();
+        public Transform spawns;
 
         public Transform coinParent;
 
@@ -48,6 +48,7 @@ namespace TikTokLiveUnity.Example
         /// </summary>
         private IEnumerator Start()
         {
+            InvokeRepeating("SpawnNormalCoinVoid", 10, 5);
             mgr.OnLike += OnLike;
             mgr.OnChatMessage += OnComment;
             mgr.OnGift += OnGift;
@@ -68,7 +69,25 @@ namespace TikTokLiveUnity.Example
 
         private void OnGift(TikTokLiveClient sender, TikTokGift gift)
         {
-            GiftCheck(gift);
+            gift.OnStreakFinished += StreakFinished;
+            if (gift.StreakFinished)
+            {
+                StreakFinished(gift, gift.Amount);
+            }
+        }
+
+        private void StreakFinished(TikTokGift gift, long finalAmount)
+        {
+            StartCoroutine(DoTheGiftCheck(gift, finalAmount));
+        }
+
+        IEnumerator DoTheGiftCheck(TikTokGift gift, long finalAmount)
+        {
+            for (int i = 0; i < finalAmount; i++)
+            {
+                GiftCheck(gift);
+                yield return new WaitForSeconds(1f);
+            }
         }
 
         /// <summary>
@@ -106,49 +125,58 @@ namespace TikTokLiveUnity.Example
         {
             if (gift.Gift.Id == giftList[0])
             {
-                StartCoroutine(SpawnCoin(coinsPrefab[0], 1, gift)); // 200
+                StartCoroutine(SpawnCoin(coinsPrefab[1], 1, gift)); // 200
             }
 
             if (gift.Gift.Id == giftList[1])
             {
-                StartCoroutine(SpawnCoin(coinsPrefab[0], 10, gift)); // 2.000
+                StartCoroutine(SpawnCoin(coinsPrefab[1], 15, gift)); // 2.000
             }
 
             if (gift.Gift.Id == giftList[2])
             {
-                StartCoroutine(SpawnCoin(coinsPrefab[0], 30, gift)); // 6.000
+                StartCoroutine(SpawnCoin(coinsPrefab[2], 30, gift)); // 6.000
             }
 
             if (gift.Gift.Id == giftList[3])
-            {
-                StartCoroutine(SpawnCoin(coinsPrefab[0], 30, gift)); //10.000
-                StartCoroutine(SpawnCoin(coinsPrefab[1], 4, gift));
+            { 
+                StartCoroutine(SpawnCoin(coinsPrefab[2], 75, gift)); //10.000
             }
 
             if (gift.Gift.Id == giftList[4])
             {
-                StartCoroutine(SpawnCoin(coinsPrefab[1], 20, gift)); //20.000
+                StartCoroutine(SpawnCoin(coinsPrefab[3], 140, gift)); //20.000
             }
 
             if (gift.Gift.Id == giftList[5])
             {
-                StartCoroutine(SpawnCoin(coinsPrefab[1], 45, gift)); // 40.000
+                StartCoroutine(SpawnCoin(coinsPrefab[3], 360, gift)); // 40.000
             }
 
             if (gift.Gift.Id == giftList[6])
             {
-                StartCoroutine(SpawnCoin(coinsPrefab[0], 150, gift)); // 120.000
-                StartCoroutine(SpawnCoin(coinsPrefab[0], 100, gift)); // 120.000
+                StartCoroutine(SpawnCoin(coinsPrefab[4], 1000, gift)); // 120.000
             }
         }
 
+        void SpawnNormalCoinVoid()
+        {
+            StartCoroutine(SpawnNormalCoin());
+        }
+
+        IEnumerator SpawnNormalCoin()
+        {
+            int order = Random.Range(0,3);
+            GameObject newCoin = Instantiate(coinsPrefab[0], spawns.position, Quaternion.Euler(90, 0, 0), coinParent);
+            yield return new WaitForSeconds(1f);
+        }
 
         IEnumerator SpawnCoin(GameObject coin, int amount, TikTokGift gift)
         {
             int order = 0;
             for(int i = 0; i < amount; i++)
             {
-                GameObject newCoin = Instantiate(coin, spawns[order].position, Quaternion.Euler(90, 0, 0));
+                GameObject newCoin = Instantiate(coin, spawns.position, Quaternion.Euler(90, 0, 0), coinParent);
                 RequestImage(newCoin.GetComponent<Coin>().imgs[0], gift.Sender.AvatarThumbnail);
                 RequestImage(newCoin.GetComponent<Coin>().imgs[1], gift.Sender.AvatarThumbnail);
                 if (order < 2) order++;

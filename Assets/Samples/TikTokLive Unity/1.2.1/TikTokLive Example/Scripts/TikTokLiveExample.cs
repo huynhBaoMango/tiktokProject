@@ -105,12 +105,9 @@ namespace TikTokLiveUnity.Example
         /// </summary>
         private IEnumerator Start()
         {
-            btnConnect.onClick.AddListener(OnClick_Connect);
+            //btnConnect.onClick.AddListener(OnClick_Connect);
             mgr.OnConnected += ConnectStatusChange;
             mgr.OnDisconnected += ConnectStatusChange;
-            mgr.OnJoin += OnJoin;
-            mgr.OnLike += OnLike;
-            mgr.OnChatMessage += OnComment;
             mgr.OnGift += OnGift;
             for (int i = 0; i < 3; i++)
                 yield return null; // Wait 3 frames in case Auto-Connect is enabled
@@ -121,14 +118,11 @@ namespace TikTokLiveUnity.Example
         /// </summary>
         private void OnDestroy()
         {
-            btnConnect.onClick.RemoveListener(OnClick_Connect);
+            //btnConnect.onClick.RemoveListener(OnClick_Connect);
             if (!TikTokLiveManager.Exists)
                 return;
             mgr.OnConnected -= ConnectStatusChange;
             mgr.OnDisconnected -= ConnectStatusChange;
-            mgr.OnJoin -= OnJoin;
-            mgr.OnLike -= OnLike;
-            mgr.OnChatMessage -= OnComment;
             mgr.OnGift -= OnGift;
         }
         #endregion
