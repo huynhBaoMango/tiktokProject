@@ -25,8 +25,10 @@ public class GameManager : MonoBehaviour
     public int curIndex1, curIndex2;
     public List<int> used;
     public GameObject machine;
-
+    public GameObject slider;
     public float cooldownShake = 0f;
+
+    public AudioClip EndGameCheers;
     
     void Start()
     {
@@ -54,7 +56,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 isPlaying = false;
-                EndGameTrigger();
+                StartCoroutine(EndGameTrigger());
             }
         }
     }
@@ -75,7 +77,8 @@ public class GameManager : MonoBehaviour
 
     void StartARound()
     {
-        elapsedTime = 5;
+        PutMachineBack();
+        elapsedTime = 60;
         scoreCounter.scoreTeam1 = 0;
         scoreCounter.scoreTeam2 = 4;
         imgTeam1.sprite = sprites[curIndex1];
@@ -104,8 +107,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void EndGameTrigger()
+    IEnumerator EndGameTrigger()
     {
+        LeanMachine();
+        slider.SetActive(false);
+
+        yield return new WaitForSeconds(5f);
+
+        SoundFxManager.instance.PlaySFX(EndGameCheers, transform, 1f);
         EndGameUI.gameObject.SetActive(true);
         EndGameUI.FadeIn();
         EndGameUI.UpdateWinAndLose(imgTeam1.sprite, scoreCounter.scoreTeam1, imgTeam2.sprite, scoreCounter.scoreTeam2);
@@ -140,6 +149,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(10f);
         EndGameUI.FadeOut();
         StartARound();
+        slider.SetActive(true);
         isPlaying = true;
     }
 
@@ -162,5 +172,11 @@ public class GameManager : MonoBehaviour
     {
         machine.transform.LeanRotateAroundLocal(new Vector3(1f, 0, 0), -60f, 0.1f);
         machine.transform.DOMoveY(machine.transform.position.y + 50f, 1f);
+    }
+
+    void PutMachineBack()
+    {
+        machine.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        machine.transform.position = new Vector3(0, 29.66053f, 121);
     }
 }

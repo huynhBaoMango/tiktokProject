@@ -23,6 +23,8 @@ namespace TikTokLiveUnity.Example
         [Tooltip("Prefab for Row to display Gift")]
         private tiktokGift giftRowPrefab;
 
+        public AudioClip coinInsert;
+
         List<long> giftList = new List<long>()
         {
             5655, // rose, 200d
@@ -80,6 +82,7 @@ namespace TikTokLiveUnity.Example
             if (gameManager.isPlaying)
             {
                 StartCoroutine(DoTheGiftCheck(gift, finalAmount));
+                SoundFxManager.instance.PlaySFX(coinInsert, transform, 1f);
             }
         }
 

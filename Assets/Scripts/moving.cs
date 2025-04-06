@@ -34,20 +34,17 @@ public class moving : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(manager.isPlaying)
+        // Tính toán khoảng cách di chuyển mỗi frame
+        float step = moveSpeed * Time.deltaTime;
+
+        // Di chuyển đối tượng đến mục tiêu một cách mượt mà
+        rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, step));
+
+        // Kiểm tra nếu đối tượng đã đạt đến mục tiêu
+        if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
         {
-            // Tính toán khoảng cách di chuyển mỗi frame
-            float step = moveSpeed * Time.deltaTime;
-
-            // Di chuyển đối tượng đến mục tiêu một cách mượt mà
-            rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, step));
-
-            // Kiểm tra nếu đối tượng đã đạt đến mục tiêu
-            if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
-            {
-                // Đổi hướng di chuyển sau 1.5 giây
-                Invoke(isMovingForward ? "MoveBack" : "MoveForward", 1.5f);
-            }
+            // Đổi hướng di chuyển sau 1.5 giây
+            Invoke(isMovingForward ? "MoveBack" : "MoveForward", 1.5f);
         }
     }
 }
